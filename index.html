@@ -366,20 +366,188 @@ button{font-family:inherit;cursor:pointer}
 /* ===== NL SVG ===== */
 .nl-svg{width:100%;max-width:580px;display:block;margin:4px 0 20px}
 
-/* ===== RESPONSIVE ===== */
+/* ===== MOBILE BOTTOM NAV ===== */
+.mobile-topbar{display:none}
+.mobile-nav-overlay{display:none}
+.mobile-bottom-nav{display:none}
+
 @media(max-width:700px){
-  .app{flex-direction:column}
-  .sidebar{width:100%;height:auto;max-height:50vh}
-  .dashboard,.topic-page,.progress-page{padding:24px 20px 80px}
-  .dash-stats{grid-template-columns:repeat(3,1fr)}
-  .chapters-grid{grid-template-columns:1fr}
-  .pg-stats{grid-template-columns:repeat(2,1fr)}
+  /* Hide desktop sidebar entirely */
+  .sidebar{display:none}
+
+  /* Full-height layout */
+  .app{flex-direction:column;height:100vh;overflow:hidden}
+  .main{flex:1;overflow-y:auto;padding-bottom:70px}
+
+  /* ── Top bar ── */
+  .mobile-topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 16px;background:var(--bg2);
+    border-bottom:1px solid var(--border);flex-shrink:0;
+    position:sticky;top:0;z-index:100;
+  }
+  .mob-logo{display:flex;align-items:center;gap:8px}
+  .mob-logo-icon{
+    width:28px;height:28px;background:var(--lime);border-radius:7px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:700;color:#0a0a0f;
+  }
+  .mob-logo-text{font-size:14px;font-weight:600;letter-spacing:-0.02em}
+  .mob-logo-text em{color:var(--lime);font-style:italic}
+  .mob-progress-wrap{display:flex;align-items:center;gap:8px}
+  .mob-pct{font-size:12px;font-weight:600;color:var(--lime);font-family:'JetBrains Mono',monospace}
+  .mob-bar{width:80px;height:4px;background:var(--bg4);border-radius:99px;overflow:hidden}
+  .mob-bar-fill{height:100%;background:var(--lime);border-radius:99px;transition:width 0.5s}
+  .mob-menu-btn{
+    width:36px;height:36px;border-radius:9px;background:var(--bg4);
+    border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;
+    font-size:18px;color:var(--muted2);flex-shrink:0;
+  }
+
+  /* ── Slide-in topics drawer ── */
+  .mobile-nav-overlay{
+    display:block;position:fixed;inset:0;z-index:200;
+    background:rgba(0,0,0,0.6);opacity:0;pointer-events:none;
+    transition:opacity 0.25s;
+  }
+  .mobile-nav-overlay.open{opacity:1;pointer-events:all}
+  .mobile-drawer{
+    position:fixed;top:0;left:0;bottom:0;width:min(300px,88vw);
+    background:var(--bg2);border-right:1px solid var(--border);
+    display:flex;flex-direction:column;z-index:201;
+    transform:translateX(-100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  }
+  .mobile-nav-overlay.open .mobile-drawer{transform:translateX(0)}
+  .drawer-header{
+    padding:16px 18px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+  }
+  .drawer-title{font-size:14px;font-weight:600}
+  .drawer-close{
+    width:32px;height:32px;border-radius:8px;background:var(--bg4);
+    border:1px solid var(--border2);color:var(--muted2);
+    display:flex;align-items:center;justify-content:center;font-size:18px;
+  }
+  .drawer-progress{padding:12px 18px 10px;border-bottom:1px solid var(--border)}
+  .drawer-progress .progress-row{margin-bottom:6px}
+  .drawer-nav{flex:1;overflow-y:auto;padding:8px 0}
+  .drawer-nav .nav-item{padding:9px 18px 9px 24px;font-size:14px}
+  .drawer-footer{
+    padding:12px 18px;border-top:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+
+  /* ── Bottom nav bar ── */
+  .mobile-bottom-nav{
+    display:flex;position:fixed;bottom:0;left:0;right:0;z-index:150;
+    background:var(--bg2);border-top:1px solid var(--border);
+    padding:8px 0 max(8px,env(safe-area-inset-bottom));
+  }
+  .mob-nav-btn{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+    font-size:10px;font-weight:500;color:var(--muted);
+    padding:4px 0;border:none;background:none;transition:color 0.15s;
+  }
+  .mob-nav-btn .icon{font-size:20px;line-height:1}
+  .mob-nav-btn.active{color:var(--lime)}
+  .mob-nav-btn:hover{color:var(--muted2)}
+
+  /* ── Content layout tweaks ── */
+  .dashboard{padding:20px 16px 20px}
+  .topic-page{padding:20px 16px 20px}
+  .progress-page{padding:20px 16px 20px}
+
+  /* hero */
+  .dash-title{font-size:clamp(28px,8vw,40px)}
+  .dash-eyebrow{flex-wrap:wrap;gap:6px}
+
+  /* stats strip */
+  .dash-stats{grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+  .stat{padding:14px 12px;border-radius:12px}
+  .stat-n{font-size:24px}
+  .stat-l{font-size:11px}
+
+  /* progress bar */
+  .overall-bar-wrap{padding:14px 16px;gap:12px;margin-bottom:28px}
+
+  /* chapter cards */
+  .chapters-grid{grid-template-columns:1fr;gap:10px;margin-bottom:32px}
+  .topic-row{padding:12px 16px}
+  .topic-row .tn{font-size:14px}
+
+  /* topic page */
+  .tp-header{flex-direction:column;align-items:flex-start;gap:12px}
+  .mark-btn{align-self:stretch;text-align:center;padding:12px}
+  .tp-title{font-size:clamp(24px,7vw,36px)}
+  .formula{font-size:13px;padding:12px 16px;overflow-x:auto}
+  .q-head{padding:14px 16px;gap:10px}
+  .q-actions{padding:0 16px 14px;gap:8px}
+  .btn{padding:10px 14px;font-size:13px}
+  .score-row{flex-wrap:wrap;gap:10px;padding:12px 16px}
+  .score-track{width:100%;order:3}
+
+  /* progress page */
+  .pg-title{font-size:32px}
+  .pg-stats{grid-template-columns:repeat(2,1fr);gap:8px}
   .break-grid{grid-template-columns:1fr}
+  .log-card{flex-direction:column;align-items:flex-start;gap:8px;padding:14px 16px}
+  .log-date{min-width:unset}
+
+  /* unit header */
+  .unit-header{flex-wrap:wrap;gap:6px}
+  .unit-sub{margin-left:0;width:100%}
 }
 </style>
 </head>
 <body>
 <div class="app">
+
+<!-- ===== MOBILE TOP BAR ===== -->
+<header class="mobile-topbar">
+  <div class="mob-logo">
+    <div class="mob-logo-icon">∑</div>
+    <div class="mob-logo-text">AS Maths <em>Revision</em></div>
+  </div>
+  <div class="mob-progress-wrap">
+    <div class="mob-bar"><div class="mob-bar-fill" id="mobBar" style="width:0%"></div></div>
+    <span class="mob-pct" id="mobPct">0%</span>
+  </div>
+  <button class="mob-menu-btn" onclick="openDrawer()" aria-label="Open topics menu">☰</button>
+</header>
+
+<!-- ===== MOBILE DRAWER ===== -->
+<div class="mobile-nav-overlay" id="mobOverlay" onclick="closeDrawer()">
+  <div class="mobile-drawer" onclick="event.stopPropagation()">
+    <div class="drawer-header">
+      <span class="drawer-title">Topics</span>
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="drawer-progress">
+      <div class="progress-row">
+        <span class="progress-label">Overall progress</span>
+        <span class="progress-pct" id="drawerPct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="drawerBar" style="width:0%"></div></div>
+    </div>
+    <nav class="drawer-nav" id="drawerNav"></nav>
+    <div class="drawer-footer">
+      <div class="streak">🔥 <span class="streak-num" id="streakNum2">0</span> day streak</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MOBILE BOTTOM NAV ===== -->
+<nav class="mobile-bottom-nav">
+  <button class="mob-nav-btn active" id="mbn-dash" onclick="showDashboard();setMobActive('dash')">
+    <span class="icon">⊞</span>Dashboard
+  </button>
+  <button class="mob-nav-btn" id="mbn-topics" onclick="openDrawer()">
+    <span class="icon">📚</span>Topics
+  </button>
+  <button class="mob-nav-btn" id="mbn-progress" onclick="showProgress();setMobActive('progress')">
+    <span class="icon">📈</span>Progress
+  </button>
+</nav>
 
 <!-- ===== SIDEBAR ===== -->
 <aside class="sidebar">
@@ -1156,15 +1324,60 @@ document.addEventListener('click', e=>{
 });
 
 // ============================================================
-// INIT
+// MOBILE DRAWER & NAV
 // ============================================================
+function openDrawer(){
+  // Populate drawer nav if empty
+  const dn=document.getElementById('drawerNav');
+  if(!dn.children.length){
+    const sn=document.getElementById('sidebarNav');
+    dn.innerHTML=sn.innerHTML;
+    // Wire up clicks to close drawer and navigate
+    dn.querySelectorAll('.nav-item').forEach(item=>{
+      item.addEventListener('click',()=>{
+        closeDrawer();
+        setMobActive('topics');
+      });
+    });
+  }
+  document.getElementById('mobOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeDrawer(){
+  document.getElementById('mobOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function setMobActive(tab){
+  ['dash','topics','progress'].forEach(t=>{
+    const btn=document.getElementById('mbn-'+t);
+    if(btn) btn.classList.toggle('active',t===tab);
+  });
+}
+
+function refreshMobileProgress(){
+  const done=totalDone(), total=Object.keys(TOPICS).length;
+  const pct=Math.round((done/total)*100);
+  const mb=document.getElementById('mobBar');
+  const mp=document.getElementById('mobPct');
+  const db=document.getElementById('drawerBar');
+  const dp=document.getElementById('drawerPct');
+  const sn2=document.getElementById('streakNum2');
+  if(mb) mb.style.width=pct+'%';
+  if(mp) mp.textContent=pct+'%';
+  if(db) db.style.width=pct+'%';
+  if(dp) dp.textContent=pct+'%';
+  if(sn2) sn2.textContent=getStreak();
+}
+
 function init(){
   buildSidebar();
   buildDashboard();
   refreshStreak();
 
   // Days to exam
-  const exam=new Date('2024-05-23');
+  const exam=new Date('2026-05-23');
   const diff=Math.ceil((exam-new Date())/(1000*60*60*24));
   const dl=document.getElementById('daysLeft');
   if(dl) dl.textContent=diff>0?diff:'exam day!';
@@ -1173,16 +1386,34 @@ function init(){
   showDashboard();
 
   // Wire progress button in sidebar footer
-  document.querySelector('.sidebar-footer').addEventListener('click', e=>{
-    if(e.target.matches('.dashboard-btn')) showDashboard();
+  const sf=document.querySelector('.sidebar-footer');
+  if(sf){
+    sf.addEventListener('click', e=>{
+      if(e.target.matches('.dashboard-btn')) showDashboard();
+    });
+    const progBtn=document.createElement('button');
+    progBtn.className='dashboard-btn';
+    progBtn.textContent='Progress';
+    progBtn.onclick=showProgress;
+    sf.insertBefore(progBtn, sf.querySelector('.dashboard-btn'));
+  }
+
+  // Mobile: initial progress sync
+  refreshMobileProgress();
+
+  // Patch refreshDashboardStats to also update mobile bar
+  const _orig=refreshDashboardStats;
+  refreshDashboardStats=function(){
+    _orig();
+    refreshMobileProgress();
+    // Also refresh drawer nav to reflect done state
+    document.getElementById('drawerNav').innerHTML='';
+  };
+
+  // Mobile: back button should set dashboard active
+  document.addEventListener('click', e=>{
+    if(e.target.matches('.tp-back')) setMobActive('dash');
   });
-  // Add a progress link
-  const footer=document.querySelector('.sidebar-footer');
-  const progBtn=document.createElement('button');
-  progBtn.className='dashboard-btn';
-  progBtn.textContent='Progress';
-  progBtn.onclick=showProgress;
-  footer.insertBefore(progBtn, footer.querySelector('.dashboard-btn'));
 }
 
 init();
